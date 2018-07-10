@@ -7,6 +7,8 @@ const endOfLine = require('os').EOL;
 const prefixS3origin = 'img/1200x900/';
 const prefixS3dest = 'img/blured/';
 
+const SuccesscsvFile = './success.csv'
+
 const { AWS_ACCESSKEYID, AWS_SECRETACCESSKEY } = process.env;
 
 // ventura credentials
@@ -75,10 +77,15 @@ async function start(csvFile, bucket) {
   //const notFound = [];
   //const found = [];
   const res = await readData(csvFile);
-  console.log('Entries: ' + res.length);
+  const successEntries = await readData(SuccesscsvFile);
+  const toProcess = res.filter(x => !successEntries.includes(x));
 
-  for(let i = 0; i < res.length; i++) {
-    const fileName =  res[i];
+  console.log('Entries: ' + res.length);
+  console.log('Success: ' + successEntries.length);
+  console.log('Difference: ' + toProcess.length);
+
+  for(let i = 0; i < toProcess.length; i++) {
+    const fileName =  toProcess[i];
     // const fileName =  '5b32da8aca63c.jpg';
     let s3File;
     try { 
@@ -97,7 +104,7 @@ async function start(csvFile, bucket) {
         await putS3file(bucket, toSaveFileName, bufferP, s3File)
         // save succes files in other file
         console.log(i + ' saved ', toSaveFileName);
-        fs.appendFileSync('success.csv', '"'+ toSaveFileName +'"' + endOfLine)
+        fs.appendFileSync(SuccesscsvFile, '"'+ toSaveFileName +'"' + endOfLine)
       } catch(e) {
         fs.appendFileSync('errorSaving.csv', '"'+ toSaveFileName +'"' + endOfLine)
         console.log('Error', fileName, e);
