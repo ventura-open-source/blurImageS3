@@ -1,0 +1,11 @@
+# misc
+.DS_Store
+.env
+
+# vim files
+*.swp
+*.swo
+*.swn
+*.swm
+
+node_modules/

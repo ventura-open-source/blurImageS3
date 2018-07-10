@@ -1,0 +1,17 @@
+{
+  "name": "imageprocessor",
+  "version": "1.0.0",
+  "description": "blur image from s3, listed by file",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Jose Echavez <jose.echavez92@gmail.com>",
+  "license": "ISC",
+  "dependencies": {
+    "fast-csv": "^2.4.1",
+    "jimp": "^0.2.28",
+    "aws-sdk": "^2.269.1"
+  }
+}
